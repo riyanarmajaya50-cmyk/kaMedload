@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Instagram Downloader</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: #020617;
+      padding: 24px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    h1 {
+      font-size: 22px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    p {
+      font-size: 14px;
+      opacity: 0.8;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 16px;
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 16px;
+      border-radius: 10px;
+      border: none;
+      background: #6366f1;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4f46e5;
+    }
+    .result {
+      margin-top: 16px;
+      text-align: center;
+    }
+    a.download {
+      display: inline-block;
+      margin-top: 12px;
+      color: #22c55e;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Instagram Downloader</h1>
+    <p>Download video atau foto Instagram</p>
+
+    <input id="url" type="text" placeholder="Paste link Instagram di sini" />
+    <button onclick="downloadIG()">Download</button>
+
+    <div class="result" id="result"></div>
+
+    <footer>
+      © 2026 IG Downloader • Demo GitHub
+    </footer>
+  </div>
+
+  <script>
+    async function downloadIG() {
+      const url = document.getElementById('url').value;
+      const result = document.getElementById('result');
+
+      if (!url) {
+        result.innerHTML = 'Masukkan link Instagram dulu.';
+        return;
+      }
+
+      result.innerHTML = 'Memproses...';
+
+      try {
+        // Contoh API publik (GANTI dengan API backend kamu sendiri)
+        const api = `https://api.vreden.web.id/api/igdl?url=${encodeURIComponent(url)}`;
+        const res = await fetch(api);
+        const data = await res.json();
+
+        if (!data.result || data.result.length === 0) {
+          result.innerHTML = 'Gagal mengambil media.';
+          return;
+        }
+
+        const media = data.result[0];
+        result.innerHTML = `
+          <video src="${media.url}" controls width="100%"></video><br />
+          <a class="download" href="${media.url}" download>⬇ Download File</a>
+        `;
+      } catch (err) {
+        result.innerHTML = 'Terjadi error.';
+      }
+    }
+  </script>
+</body>
+</html>
